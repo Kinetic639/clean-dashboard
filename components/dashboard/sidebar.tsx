@@ -1,17 +1,21 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import * as Icons from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useSidebarStore } from '@/lib/stores/sidebar-store';
-import { getOrganizationModule } from '@/lib/modules/organization/config';
-import { MenuItem } from '@/lib/types/module';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChevronRight, Building2 } from 'lucide-react';
+import * as React from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import * as Icons from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useSidebarStore } from "@/lib/stores/sidebar-store";
+import { getOrganizationModule } from "@/lib/modules/organization/config";
+import { MenuItem } from "@/lib/types/module";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronRight, Building2 } from "lucide-react";
 
 interface NavigationTreeProps {
   items: MenuItem[];
@@ -45,29 +49,31 @@ function NavigationTree({ items, level = 0 }: NavigationTreeProps) {
   return (
     <div className="space-y-1">
       {items.map((item) => {
-        const Icon = Icons[item.icon as keyof typeof Icons] as React.ComponentType<{ className?: string }>;
-        
-        if (item.type === 'action') {
+        const Icon = Icons[
+          item.icon as keyof typeof Icons
+        ] as React.ComponentType<{ className?: string }>;
+
+        if (item.type === "action") {
           return (
             <Button
               key={item.id}
               variant="ghost"
               className={cn(
-                'w-full justify-start h-10 px-3',
-                level > 0 && 'ml-4 w-[calc(100%-1rem)]',
-                isCollapsed && 'px-2 justify-center',
+                "w-full justify-start h-10 px-3",
+                level > 0 && "ml-4 w-[calc(100%-1rem)]",
+                isCollapsed && "px-2 justify-center"
               )}
               onClick={() => {
                 // Handle action here
-                console.log('Action:', item.actionId);
+                console.log("Action:", item.actionId);
               }}
             >
-              <Icon className={cn('h-4 w-4', !isCollapsed && 'mr-3')} />
+              <Icon className={cn("h-4 w-4", !isCollapsed && "mr-3")} />
               <AnimatePresence>
                 {!isCollapsed && (
                   <motion.span
                     initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: 'auto' }}
+                    animate={{ opacity: 1, width: "auto" }}
                     exit={{ opacity: 0, width: 0 }}
                     className="truncate"
                   >
@@ -79,29 +85,34 @@ function NavigationTree({ items, level = 0 }: NavigationTreeProps) {
           );
         }
 
-        const isActive = pathname === item.path || pathname.startsWith(item.path + '/');
+        const isActive =
+          pathname === item.path || pathname.startsWith(item.path + "/");
         const hasChildren = item.submenu && item.submenu.length > 0;
         const isOpen = openItems.has(item.id);
 
         if (hasChildren) {
           return (
-            <Collapsible key={item.id} open={isOpen} onOpenChange={() => toggleItem(item.id)}>
+            <Collapsible
+              key={item.id}
+              open={isOpen}
+              onOpenChange={() => toggleItem(item.id)}
+            >
               <CollapsibleTrigger asChild>
                 <Button
                   variant="ghost"
                   className={cn(
-                    'w-full justify-start h-10 px-3',
-                    level > 0 && 'ml-4 w-[calc(100%-1rem)]',
-                    isActive && 'bg-primary/10 text-primary',
-                    isCollapsed && 'px-2 justify-center',
+                    "w-full justify-start h-10 px-3",
+                    level > 0 && "ml-4 w-[calc(100%-1rem)]",
+                    isActive && "bg-primary/10 text-primary",
+                    isCollapsed && "px-2 justify-center"
                   )}
                 >
-                  <Icon className={cn('h-4 w-4', !isCollapsed && 'mr-3')} />
+                  <Icon className={cn("h-4 w-4", !isCollapsed && "mr-3")} />
                   <AnimatePresence>
                     {!isCollapsed && (
                       <motion.span
                         initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: 'auto' }}
+                        animate={{ opacity: 1, width: "auto" }}
                         exit={{ opacity: 0, width: 0 }}
                         className="truncate"
                       >
@@ -112,8 +123,8 @@ function NavigationTree({ items, level = 0 }: NavigationTreeProps) {
                   {!isCollapsed && (
                     <ChevronRight
                       className={cn(
-                        'ml-auto h-4 w-4 transition-transform',
-                        isOpen && 'rotate-90'
+                        "ml-auto h-4 w-4 transition-transform",
+                        isOpen && "rotate-90"
                       )}
                     />
                   )}
@@ -131,24 +142,24 @@ function NavigationTree({ items, level = 0 }: NavigationTreeProps) {
             key={item.id}
             variant="ghost"
             className={cn(
-              'w-full justify-start h-10 px-3',
-              level > 0 && 'ml-4 w-[calc(100%-1rem)]',
-              isActive && 'bg-primary/10 text-primary',
-              isCollapsed && 'px-2 justify-center',
+              "w-full justify-start h-10 px-3",
+              level > 0 && "ml-4 w-[calc(100%-1rem)]",
+              isActive && "bg-primary/10 text-primary",
+              isCollapsed && "px-2 justify-center",
               // Special styling for saved filters
-              level > 1 && item.color && 'border-l-2 ml-6 w-[calc(100%-1.5rem)]'
+              level > 1 && item.color && "border-l-2 ml-6 w-[calc(100%-1.5rem)]"
             )}
             style={{
               borderLeftColor: level > 1 && item.color ? item.color : undefined,
             }}
             onClick={() => handleNavigation(item.path)}
           >
-            <Icon 
+            <Icon
               className={cn(
-                'h-4 w-4', 
-                !isCollapsed && 'mr-3',
-                level > 1 && item.color && 'text-current'
-              )} 
+                "h-4 w-4",
+                !isCollapsed && "mr-3",
+                level > 1 && item.color && "text-current"
+              )}
               style={{
                 color: level > 1 && item.color ? item.color : undefined,
               }}
@@ -157,7 +168,7 @@ function NavigationTree({ items, level = 0 }: NavigationTreeProps) {
               {!isCollapsed && (
                 <motion.span
                   initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
+                  animate={{ opacity: 1, width: "auto" }}
                   exit={{ opacity: 0, width: 0 }}
                   className="truncate"
                 >
@@ -183,7 +194,7 @@ export function Sidebar() {
         const organization = await getOrganizationModule();
         setOrganizationModule(organization);
       } catch (error) {
-        console.error('Failed to load module:', error);
+        console.error("Failed to load module:", error);
       } finally {
         setLoading(false);
       }
@@ -195,7 +206,7 @@ export function Sidebar() {
   return (
     <motion.aside
       animate={{ width: isCollapsed ? 80 : 280 }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
       className="relative border-r bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 h-screen"
     >
       <div className="flex h-full flex-col">
@@ -209,7 +220,7 @@ export function Sidebar() {
               {!isCollapsed && (
                 <motion.div
                   initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
+                  animate={{ opacity: 1, width: "auto" }}
                   exit={{ opacity: 0, width: 0 }}
                   className="overflow-hidden"
                 >
@@ -222,7 +233,7 @@ export function Sidebar() {
 
         {/* Navigation */}
         <ScrollArea className="flex-1 px-3 py-4">
-          {!isHydrated || loading ? (
+          {loading ? (
             <div className="space-y-2">
               {[...Array(6)].map((_, i) => (
                 <div
