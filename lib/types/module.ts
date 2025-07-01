@@ -1,4 +1,3 @@
-import { Widget } from "./widgets";
 
 export type Scope = 'org' | 'branch' | 'team';
 
@@ -35,5 +34,4 @@ export interface ModuleConfig {
   color?: string;
   items: MenuItem[];
   actions?: Record<string, () => void>;
-  widgets?: Widget[];
 }
