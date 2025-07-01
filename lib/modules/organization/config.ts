@@ -16,36 +16,6 @@ export const orgManagementModule: ModuleConfig = {
       icon: "Building2",
       type: "link",
     },
-    {
-      id: "branches",
-      label: "Oddziały",
-      path: "/dashboard/organization/branches",
-      icon: "MapPin",
-      type: "link",
-    },
-    {
-      id: "users",
-      label: "Użytkownicy",
-      path: "/dashboard/organization/users",
-      icon: "Users",
-      type: "group",
-      submenu: [
-        {
-          id: "user-list",
-          label: "Lista użytkowników",
-          path: "/dashboard/organization/users/list",
-          icon: "List",
-          type: "link",
-        },
-        {
-          id: "roles",
-          label: "Role i uprawnienia",
-          path: "/dashboard/organization/users/roles",
-          icon: "Shield",
-          type: "link",
-        },
-      ],
-    },
   ],
 };
 

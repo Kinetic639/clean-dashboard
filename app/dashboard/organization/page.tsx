@@ -29,22 +29,6 @@ function OrganizationOverview() {
       color: 'text-blue-500',
       stats: 'GCZ - Grupa Cichy-Zasada',
     },
-    {
-      title: 'Oddziały',
-      description: 'Zarządzanie oddziałami organizacji',
-      icon: MapPin,
-      href: '/dashboard/organization/branches',
-      color: 'text-green-500',
-      stats: '4 aktywne oddziały',
-    },
-    {
-      title: 'Użytkownicy',
-      description: 'Zarządzanie użytkownikami i uprawnieniami',
-      icon: Users,
-      href: '/dashboard/organization/users',
-      color: 'text-purple-500',
-      stats: '5 aktywnych użytkowników',
-    },
   ];
 
   return (

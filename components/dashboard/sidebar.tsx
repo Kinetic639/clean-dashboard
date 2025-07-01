@@ -1,21 +1,16 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as Icons from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSidebarStore } from '@/lib/stores/sidebar-store';
-import { useBranchStore } from '@/lib/stores/branch-store';
-import { useSavedFiltersStore } from '@/lib/stores/saved-filters-store';
-import { getWarehouseModule } from '@/lib/modules/warehouse/config';
 import { getOrganizationModule } from '@/lib/modules/organization/config';
 import { MenuItem } from '@/lib/types/module';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Separator } from '@/components/ui/separator';
 import { ChevronRight, Building2 } from 'lucide-react';
 
 interface NavigationTreeProps {
@@ -179,35 +174,23 @@ function NavigationTree({ items, level = 0 }: NavigationTreeProps) {
 
 export function Sidebar() {
   const { isCollapsed } = useSidebarStore();
-  const { activeBranchId, _hasHydrated: branchHydrated } = useBranchStore();
-  const { _hasHydrated: filtersHydrated } = useSavedFiltersStore();
-  const [warehouseModule, setWarehouseModule] = React.useState<any>(null);
   const [organizationModule, setOrganizationModule] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
 
-  // Wait for both stores to hydrate before loading module
-  const isHydrated = branchHydrated && filtersHydrated;
-
   React.useEffect(() => {
-    if (!isHydrated) return;
-
-    const loadModules = async () => {
+    const loadModule = async () => {
       try {
-        const [warehouse, organization] = await Promise.all([
-          getWarehouseModule(activeBranchId),
-          getOrganizationModule()
-        ]);
-        setWarehouseModule(warehouse);
+        const organization = await getOrganizationModule();
         setOrganizationModule(organization);
       } catch (error) {
-        console.error('Failed to load modules:', error);
+        console.error('Failed to load module:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    loadModules();
-  }, [activeBranchId, isHydrated]);
+    loadModule();
+  }, []);
 
   return (
     <motion.aside
@@ -250,32 +233,6 @@ export function Sidebar() {
             </div>
           ) : (
             <div className="space-y-6">
-              {/* Warehouse Module */}
-              {warehouseModule && (
-                <div>
-                  <AnimatePresence>
-                    {!isCollapsed && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="px-3 mb-2"
-                      >
-                        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                          Magazyn
-                        </h2>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  <NavigationTree items={warehouseModule.items} />
-                </div>
-              )}
-
-              {/* Separator */}
-              {warehouseModule && organizationModule && (
-                <Separator className="mx-3" />
-              )}
-
               {/* Organization Module */}
               {organizationModule && (
                 <div>
@@ -298,7 +255,7 @@ export function Sidebar() {
               )}
 
               {/* Error State */}
-              {!warehouseModule && !organizationModule && !loading && (
+              {!organizationModule && !loading && (
                 <div className="text-center text-muted-foreground text-sm">
                   Nie udało się załadować modułów
                 </div>
